@@ -1,0 +1,6 @@
+---
+# defaults file for fstab-cifs
+
+k8s_volume_plugins_directory: /usr/libexec/kubernetes/kubelet-plugins/volume/exec
+fstab_cifs_directory: fstab~cifs
+fstab_cifs_download_url: https://raw.githubusercontent.com/fstab/cifs/master/cifs

@@ -1,0 +1,20 @@
+galaxy_info:
+  role_name: fstab_cifs
+  author: mylocaldevstack
+  description: mylocaldevstack.pl
+  company: mylocaldevstack.pl
+  license: Apache
+  min_ansible_version: 2.4
+  platforms:
+  - name: Ubuntu
+    versions:
+    - all
+  - name: Debian
+    versions:
+    - all
+  galaxy_tags:
+    - k8s
+    - kubernetes
+    - storage
+    - cifs
+dependencies: []

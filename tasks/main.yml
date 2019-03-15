@@ -1,0 +1,38 @@
+---
+- name: Install needed prerequisites
+  apt:
+    name: "{{ packages }}"
+  vars:
+    packages:
+    - jq
+    - cifs-utils
+    - util-linux
+    - coreutils
+  become: yes
+
+- name: Create fstab/cifs plugin directory
+  file:
+    path: "{{ k8s_volume_plugins_directory }}/{{ fstab_cifs_directory }}"
+    state: directory
+    mode: 0755
+  become: yes
+
+- name: Download fstab/cifs plugin binary
+  get_url:
+    url: "{{ fstab_cifs_download_url }}"
+    dest: "{{ k8s_volume_plugins_directory }}/{{ fstab_cifs_directory }}"
+    mode: 0755
+  become: yes
+
+- name: Initialize fstab/cifs plugin
+  shell: "$VOLUME_PLUGIN_DIR/{{ fstab_cifs_directory }}/cifs init"
+  args:
+    executable: /bin/bash
+  environment:
+    VOLUME_PLUGIN_DIR="{{ k8s_volume_plugins_directory }}"
+  register: cifs_initialization
+  become: yes
+
+- name: Verify fstab/cifs initialization
+  debug:
+    var: cifs_initialization.stdout
