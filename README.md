@@ -36,6 +36,47 @@ if your cluster has volume plugins in other directory (because you're running yo
          - role: mylocaldevstack.fstab_cifs
 ```
 
+##  How to use this plugin?
+First, you have to create a secret containing username and password to your cifs share:
+
+```yaml
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: cifs-secret
+  namespace: default
+type: fstab/cifs
+data:
+  username: ... #base64 encoded username
+  password: ... #base64 encoded password
+
+```
+
+then you need to add a volume in your deployment:
+
+```yaml
+apiVersion: v1
+...
+spec:
+  containers:
+  - name: SOMENAME
+    ...
+    volumeMounts:
+    - name: test          # reference to spec.volumes.name
+      mountPath: /data    # mountpoint in the pod
+  volumes:
+  - name: test
+    flexVolume:
+      driver: "fstab/cifs"
+      fsType: "cifs"
+      secretRef:
+        name: "cifs-secret"   # reference to deployed secret
+      options:
+        networkPath: "//HOSTAME/SHARENAME"
+        mountOptions: "dir_mode=0755,file_mode=0755,noperm"
+```
+
 ## License
 
 Apache
